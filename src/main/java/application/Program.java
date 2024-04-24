@@ -2,7 +2,7 @@ package application;
 
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
-import model.entities.Departament;
+import model.entities.Department;
 import model.entities.Seller;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class Program {
         System.out.println(seller);
 
         System.out.println("=== TEST 2: seller findById =====");
-        Departament departament = new Departament(2, null);
+        Department departament = new Department(2, null);
         List<Seller> list = sellerDao.findByDepartament(departament);
 
         for (Seller obj : list) {

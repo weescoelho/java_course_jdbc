@@ -3,7 +3,7 @@ package model.dao.impl;
 import db.DB;
 import db.DbException;
 import model.dao.SellerDao;
-import model.entities.Departament;
+import model.entities.Department;
 import model.entities.Seller;
 
 import java.sql.*;
@@ -115,7 +115,7 @@ public class SellerDaoJDBC implements SellerDao {
             rs = st.executeQuery();
 
             if (rs.next()) { //Testa se há algum resultado na consulta
-                Departament dep = instantiateDepartament(rs);
+                Department dep = instantiateDepartament(rs);
                 return instantiateSeller(rs, dep);
             }
 
@@ -129,7 +129,7 @@ public class SellerDaoJDBC implements SellerDao {
         }
     }
 
-    private Seller instantiateSeller(ResultSet rs, Departament dep) throws SQLException {
+    private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
         Seller obj = new Seller();
         obj.setId(rs.getInt("Id"));
         obj.setName(rs.getString("Name"));
@@ -140,8 +140,8 @@ public class SellerDaoJDBC implements SellerDao {
         return obj;
     }
 
-    private Departament instantiateDepartament(ResultSet rs) throws SQLException {
-        Departament dep = new Departament();
+    private Department instantiateDepartament(ResultSet rs) throws SQLException {
+        Department dep = new Department();
         dep.setId(rs.getInt("DepartmentId"));
         dep.setName(rs.getString("DepName"));
         return dep;
@@ -162,11 +162,11 @@ public class SellerDaoJDBC implements SellerDao {
             rs = st.executeQuery();
 
             List<Seller> list = new ArrayList<>();
-            Map<Integer, Departament> map = new HashMap<>();
+            Map<Integer, Department> map = new HashMap<>();
 
             while (rs.next()) {
                 Integer departmentId = rs.getInt("DepartmentId");
-                Departament dep = map.get(departmentId);
+                Department dep = map.get(departmentId);
 
                 if (dep == null) {
                     dep = instantiateDepartament(rs);
@@ -190,7 +190,7 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public List<Seller> findByDepartament(Departament departament) {
+    public List<Seller> findByDepartament(Department departament) {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
@@ -206,11 +206,11 @@ public class SellerDaoJDBC implements SellerDao {
             rs = st.executeQuery();
 
             List<Seller> list = new ArrayList<>();
-            Map<Integer, Departament> map = new HashMap<>();
+            Map<Integer, Department> map = new HashMap<>();
 
             while (rs.next()) {
                 Integer departmentId = rs.getInt("DepartmentId");
-                Departament dep = map.get(departmentId);
+                Department dep = map.get(departmentId);
 
                 if (dep == null) {
                     dep = instantiateDepartament(rs);
