@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SellerDaoJDBC implements SellerDao {
 
-    private Connection connection;
+    private final Connection connection;
 
     public SellerDaoJDBC(Connection conn) {
         this.connection = conn;
@@ -87,7 +87,16 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement st;
+        try {
+            st = connection.prepareStatement("DELETE FROM seller " +
+                    "WHERE Id = ?");
 
+            st.setInt(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
     }
 
     @Override
@@ -107,9 +116,7 @@ public class SellerDaoJDBC implements SellerDao {
 
             if (rs.next()) { //Testa se há algum resultado na consulta
                 Departament dep = instantiateDepartament(rs);
-                Seller obj = instantiateSeller(rs, dep);
-
-                return obj;
+                return instantiateSeller(rs, dep);
             }
 
             return null;
