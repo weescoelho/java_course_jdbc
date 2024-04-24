@@ -17,15 +17,24 @@ public class Program {
 
         try {
             connection = DB.getConnection();
+            connection.setAutoCommit(false); // Seta para uso de transações no banco
             st = connection.createStatement();
             rs = st.executeQuery("select * from department");
 
-            while(rs.next()){
+            while (rs.next()) {
                 System.out.println(rs.getInt("Id") + ", " + rs.getString("Name"));
             }
-        }catch (SQLException e){
-            throw new DbException(e.getMessage());
-        }finally {
+
+            connection.commit();
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                throw new DbException("Transaction rolledback" + e.getMessage());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        } finally {
             DB.closeResultSet(rs);
             DB.closeStatement(st);
             DB.closeConnection();
